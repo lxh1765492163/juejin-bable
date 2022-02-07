@@ -8,5 +8,10 @@
 <img src='./q.png'/>
 
 
-@babel/plugin-transform-runtime 并不支持 targets 的配置，就会做一些多余的转换和 polyfill。
+### @babel/plugin-transform-runtime的问题
+它不支持配置 targets 的，因为不知道目标环境支持啥，它只能全部做转换。你可能说不是有 preset-env 么？
+
+babel 中插件的应用顺序是：先 plugin 再 preset，plugin 从左到右，preset 从右到左，这样 plugin-transform-runtime 是在 preset-env 前面的。
+
+等 @babel/plugin-transform-runtime 转完了之后，再交给 preset-env 这时候已经做了无用的转换了。
 
