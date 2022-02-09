@@ -8,7 +8,7 @@ const babel = require('@babel/core');
 const { code, map } = babel.transformSync(sourceCode, {
     filename: './index.js',
     targets: {
-        browsers: 'Chrome 44',
+        browsers: 'Chrome 45',
     },
     plugins: [
         ['@babel/transform-runtime', { corejs: 3 }]
