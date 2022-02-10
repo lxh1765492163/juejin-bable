@@ -1,4 +1,7 @@
 const { SourceMapGenerator } = require('source-map');
+
+// 每个ast的node节点需要有对应的类型解析模式、
+// 自定义了节点类型的解析模式
 class Printer {
     constructor(source, fileName) {
         this.buf = '';
@@ -68,6 +71,7 @@ class Printer {
         this[node.id.type](node.id);
         this.buf += '=';
         this.printColumn++;
+        console.log(node.init.type, '这是节点的类型， 每个节点对应的类型都有相应的处理方式')
         this[node.init.type](node.init);
     }
     Identifier(node) {
@@ -124,18 +128,23 @@ class Printer {
         this.addMapping(node);
 
         node.body.forEach(item => {
-            this.buf += '    '; // 每一行都缩进4
+            this.buf += '    ';
             this.printColumn += 4;
             this[item.type](item);
             this.nextLine();
         });
 
     }
+    // 节点为数字
     NumericLiteral(node) {
         this.addMapping(node);
-
         this.buf += node.value;
 
+    }
+    // 节点为字符串
+    StringLiteral(node) {
+        this.addMapping(node);
+        this.buf += '"' + node.value + '"';
     }
 }
 

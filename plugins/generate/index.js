@@ -7,6 +7,7 @@ class Generator extends Printer {
         super(source, fileName);
     }
     generate(node) {
+        // 从跟ast节点， 将节点解析为code
         this[node.type](node);
         return {
             code: this.buf,
