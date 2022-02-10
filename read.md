@@ -1,11 +1,9 @@
-### 为什么需要babel-cli 
-Babel 附带一个内置的 CLI，可用于从命令行编译文件，
-主要的 Babel cli 脚本命令，babel.js
+### babel 是转译器
+编译的定义：
+从一种编程语言转成另一种编程语言。主要指的是高级语言到低级语言。
 
-
-### babel-node
-会在运行之前编译 ES6 代码
-
+转译器的定义：
+高级语言到高级语言的转换工具
 
 
 
@@ -19,14 +17,12 @@ generate 是打印 AST 成目标代码并生成 sourcemap
 
 
 babel 7 把这些功能的实现放到了不同的包里面：
-
 @babel/parser 解析源码成 AST，对应 parse 阶段
 @babel/traverse 遍历 AST 并调用 visitor 函数，对应 transform 阶段
 @babel/generate 打印 AST，生成目标代码和 sorucemap，对应 generate 阶段
 
 
 其中，遍历过程中需要创建 AST，会用到：
-
 @babel/types 创建、判断 AST
 @babel/template 根据模块批量创建 AST
 
@@ -47,31 +43,39 @@ regenerator：async await 的实现，由 facebook 维护
 
 @babel/cli babel 的命令行工具，支持通过 glob 字符串来编译多个文件
 
-### generate
-对不同的 AST 节点做不同的处理，在这个过程中把抽象语法树中省略掉的一些分隔符重新加回来。
+
+### ast
+AST 也是有标准的 ， JS parser 的 AST 大多是 estree 标准， 可以访问 https://astexplorer.net/ 查看源码相应的ast语法
+源码中的字面量、标识符、表达式、语句、模块语法、class 语法都有各自的 AST语法。
+
+ast语法又有一些公用的属性
+type： AST 节点的类型
+start、end、loc：start 和 end 代表该节点对应的源码字符串的开始和结束下标，不区分行列。而 loc 属性是一个对象，有 line 和 column 属性分别记录开始和结束行列号。
+leadingComments、innerComments、trailingComments： 表示开始的注释、中间的注释、结尾的注释，因为每个 AST 节点中都可能存在注释，而且可能在开始、中间、结束这三种位置，通过这三个属性来记录和 Comment 的关联。
+extra：记录一些额外的信息，用于处理一些特殊情况。比如 StringLiteral 修改 value 只是值的修改，而修改 extra.raw 则可以连同单双引号一起修改。
 
 
-### plugin
-babel 的 plugin 是在配置文件里面通过 plugins 选项配置，值为字符串或者数组。
-如果需要传参就用数组格式，第二个元素为参数。
 
-### plugin & preset 
-babel 会按照如下顺序处理插件和 preset：
-
-先应用 plugin，再应用 preset
-plugin 从前到后，preset 从后到前
-
-
-### browserslist 
-browserslist 使用 Can I Use 网站的数据来查询浏览器版本范围
-.browserslistrc 文件 已经package.json 中browserslist字段规定
+### babel 的 api 有哪些
+1. parse 阶段有@babel/parser，功能是把源码转成 AST
+2. transform 阶段有 @babel/traverse，可以遍历 AST，并调用 visitor 函数修改 AST，修改 AST 自然涉及到 AST 的判断、创建、修改等，这时候就需要 @babel/types
+3. @babel/template 批量创建ast
+4. generate 阶段会把 AST 打印为目标代码字符串，同时生成 sourcemap，需要 
+@babel/generate 包
+5. 中途遇到错误想打印代码位置的时候，使用 @babel/code-frame 包
+6. @babel/core 统一封装了parse， transform，generate
 
 
-### @babel/preset-env
-只转换目标环境确定不支持的特性，这就是 @babel/preset-env 做的事情。（以前是全部都转换成es5）
 
-compat-table 提供了每个特性在不同环境中的支持版本
-electron-to-chromium 这个项目，它维护了 electron 版本到 chromium 版本的映射关系。
+
+### 为什么需要babel-cli 
+Babel 附带一个内置的 CLI，可用于从命令行编译文件，
+主要的 Babel cli 脚本命令，babel.js
+
+
+### babel-node
+会在运行之前编译 ES6 代码
+
 
 
 
