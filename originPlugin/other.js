@@ -4,12 +4,18 @@ const generate = require('@babel/generator').default;
 
 
 
-const sourceCode = `console.log(1);`;
+const sourceCode = `
+const a = 1;
+function c(){
+    return a
+}
+console.log(1);`;
 
 const ast = parser.parse(sourceCode, {
     sourceType: 'unambiguous'
 });
 
+console.log(ast.program.body)
 traverse(ast, {
     CallExpression(path, state) {
 
