@@ -87,6 +87,26 @@ vsocde 的 debug 配置分为 launch 和 attach
 <b>客户端和服务端是通过 v8 debug protocol 来通信的。</b>
 
 
+### preset 与 plugin 区别
+plugin：用户===》plugin
+preset：用户===》preset====>plugin
+
+preset 就是对 babel 配置的一层封装（用户可以通过 preset 来批量引入 plugin 并进行一些配置）
+
+
+<blod>格式一样</blod>
+也是可以是一个对象，或者是一个函数，函数的参数也是一样的 api 和 options
+区别只是 preset 返回的是配置对象，包含 plugins、presets 等配置
+plugin 返回的格式请查看myPlugins/read.md
+
+
+<blod>插件与preset 处理的顺序不一样</blod>
+先应用 plugin，再应用 preset
+plugin 从前到后，preset 从后到前
+
+plugin 和 preset 还有名字的规范，符合规范的名字可以简写，这样 babel 会自动补充上 babel plugin 或 babel preset。
+@babel 开头的包会自动添加 plugin，比如 @babel/aa 会变成 @babel/plugin-aa
+（preset也是一样）
 
 
 
